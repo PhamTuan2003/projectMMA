@@ -1,5 +1,6 @@
 import { Feather, FontAwesome, FontAwesome6, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 import { useRouter } from 'expo-router';
 import { jwtDecode } from 'jwt-decode';
 import React, { useState } from "react";
@@ -14,32 +15,38 @@ const LoginScreen = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const navigation = useNavigation();
 
-  const handleSignup = () =>{
+  const handleSignup = () => {
     router.push('/register')
+    console.log('loi')
   }
 
-  const handleLogin = async () =>{
-      if(username === '' || password === ''){
-        // log loi
-      }else{
-        let res = await login(username.trim(), password.trim())
-        if(res === undefined){
-          console.log('loi')
-          return;
-        }else if(res && res.data && res.data.data){
-          if(res?.data?.data){
-            await AsyncStorage.setItem('token', res.data.data)
-          }
-          const role = jwtDecode(res.data.data);
-          console.log(role)
-          // let resAccount = await getIdCustomer(res.data.idAccount);
+  const handleLogin = async () => {
+    if (username === '' || password === '') {
+      // log loi
+    } else {
+      let res = await login(username.trim(), password.trim())
+      if (res === undefined) {
+        console.log('loi')
+        return;
+      } else if (res && res.data && res.data.data) {
+        if (res?.data?.data) {
+          await AsyncStorage.setItem('token', res.data.data)
+        }
+        const role = jwtDecode(res.data.data);
+        console.log(role)
+        // let resAccount = await getIdCustomer(res.data.idAccount);
 
-          if(role && role.role === 'ROLE_COMPANY'){
-            router.push('/cart')
-          }
+        if (role && role.role === 'ROLE_COMPANY') {
+          router.push('/cart')
+        }else if(role && role.role === 'ROLE_CUSTOMER'){
+          router.navigate('/home')
+          console.log(res.data.idCustomer)
         }
       }
+    }
   }
   return (
     <View style={{ flex: 1, width: '100%', height: '100%', backgroundColor: "#EFEEEE", position: 'relative' }}>
@@ -116,8 +123,8 @@ const LoginScreen = () => {
                 style={{ height: 55, paddingHorizontal: 20, paddingLeft: 50, fontSize: 18, backgroundColor: '#fff', borderRadius: 8, marginTop: 20 }}
                 value={username}
                 onChangeText={setUsername}
-                >
-                </TextInput>
+              >
+              </TextInput>
 
             </View>
             <View style={{ position: 'relative' }}>
@@ -126,9 +133,25 @@ const LoginScreen = () => {
                 style={{ height: 55, paddingHorizontal: 20, paddingLeft: 50, fontSize: 18, backgroundColor: '#fff', borderRadius: 8, marginTop: 20 }}
                 value={password}
                 onChangeText={setPassword}
-                >
-                </TextInput>
-              <FontAwesome6 name="eye-slash" size={20} color="gray" style={{ position: "absolute", top: 37, right: 10, zIndex: 1 }} />
+                secureTextEntry={!isPasswordVisible}
+              >
+              </TextInput>
+
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  top: 37,
+                  right: 10,
+                  zIndex: 1
+                }}
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)} // Nhấn để bật/tắt
+              >
+                <FontAwesome6
+                  name={isPasswordVisible ? "eye" : "eye-slash"}
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
 
             </View>
             <View style={{ marginTop: 20 }}>
@@ -174,10 +197,7 @@ const LoginScreen = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-
             </View>
-
-
           </View>
         </View>
       </View>

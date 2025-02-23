@@ -1,10 +1,12 @@
-import { View, Text, useWindowDimensions } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { Text, useWindowDimensions, View } from 'react-native';
 import Svg, { Path } from "react-native-svg";
 // icon
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
+
+// Màn hình giao diện lúc khởi động app
 const SplashScreen = () => {
   const router  = useRouter();
   const {width, height} = useWindowDimensions()

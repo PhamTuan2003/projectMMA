@@ -19,3 +19,7 @@ export const login = (username: string, password: string) => {
 export const getIdCustomer = (idAccount: any) => {
     return api.get(`/api/customer/idCustomer/${idAccount}`);
 }
+
+export const getProfileCustomer = (customerId: any) => {
+    return api.get(`/api/customer/profile/getProfileCustomerById/${customerId}`)
+}
