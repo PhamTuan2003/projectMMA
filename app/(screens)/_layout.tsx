@@ -1,95 +1,125 @@
-import { Stack } from 'expo-router';
-import React from 'react';
+import { Stack } from "expo-router";
+import React from "react";
 const RootLayout = () => {
   return (
-    
     <Stack>
       <Stack.Screen name="index" />
-
-      <Stack.Screen name="(tabs)"
+      <Stack.Screen
+        name="(tabs)"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-
-      <Stack.Screen name="splash"
+      <Stack.Screen
+        name="splash"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="register"
+      <Stack.Screen
+        name="register"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="login"
+      <Stack.Screen
+        name="login"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="loginPhone"
+      <Stack.Screen
+        name="loginPhone"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="verifyCode"
+      <Stack.Screen
+        name="verifyCode"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="flight"
+      <Stack.Screen
+        name="flight"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="flightDetail"
+      <Stack.Screen
+        name="flightDetail"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="travelDetail"
+      <Stack.Screen
+        name="travelDetail"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="collections"
+      <Stack.Screen
+        name="collections"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="wishLists"
+      <Stack.Screen
+        name="wishLists"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="cart"
+      <Stack.Screen
+        name="cart"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="news"
+      <Stack.Screen
+        name="news"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="newsDetail"
+      <Stack.Screen
+        name="newsDetail"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="myAccount"
+      <Stack.Screen
+        name="myAccount"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
-
-      <Stack.Screen name="home"
+      <Stack.Screen
+        name="home"
         options={{
-          headerShown: false
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="registerInformation"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="findRoom"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="orderSuccess"
+        options={{
+          headerShown: false,
         }}
       />
     </Stack>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;

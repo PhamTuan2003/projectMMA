@@ -1,55 +1,47 @@
-import {
-  View,
-  Text,
-  useWindowDimensions,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
 import React, { useState } from "react";
-import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 import { FontAwesome6, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import api from "@/utils/CustomizeApi";
-import { register } from "@/service/ApiService";
-import { useRouter } from "expo-router";
-const RegisterScreen = () => {
-  const router = useRouter();
+import {
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { updateCustomerProfile } from "@/service/ApiService";
+const RegisterInformationScreen = () => {
   const { width, height } = useWindowDimensions();
+  const route = useRouter();
   const width_node = width / 4;
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
   });
+  const { desc } = useLocalSearchParams();
 
   const handleChange = (name: string, value: string) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
-
-  const handleRegister = async () => {
+  console.log("te", desc);
+  const handleUpdate = async () => {
     try {
-      const response = await register(formData.username, formData.password);
-
-      console.log("Full API Response:", response.data);
-
-      if (!response || typeof response !== "object") {
-        console.error("API response is invalid:", response);
-        return;
-      }
-
-      if (!response.data || !response.data.desc) {
-        console.error("API response is missing necessary fields:", response);
-        return;
-      }
-
-      router.push({
-        pathname: "/registerInformation",
-        params: { desc: response.data.desc },
-      });
+      const response = await updateCustomerProfile(
+        desc as string,
+        formData.fullName,
+        formData.email,
+        formData.phoneNumber,
+        formData.address
+      );
+      console.log("datsssa", response.data);
+      router.push("/(tabs)");
     } catch (error) {
-      console.error("Registration Error:", error);
+      console.error("Lỗi cập nhật:", error.response?.data || error.message);
     }
   };
-
   return (
     <View style={{ flex: 1, backgroundColor: "#F0F0F0", height: "100%" }}>
       {/* header */}
@@ -115,24 +107,11 @@ const RegisterScreen = () => {
       </View>
       {/* body */}
       <View style={{ width: "100%", paddingTop: 30, paddingHorizontal: 15 }}>
-        {/* <View style={{ width: "100%", marginBottom: 20 }}>
-          <TextInput
-            placeholder="First Name *"
-            placeholderTextColor={"gray"}
-            style={{
-              height: 60,
-              borderRadius: 30,
-              padding: 20,
-              width: "100%",
-              backgroundColor: "white",
-              fontSize: 16,
-            }}
-          />
-        </View>
         <View style={{ width: "100%", marginBottom: 20 }}>
           <TextInput
-            placeholder="Last Name *"
+            placeholder="Full Name*"
             placeholderTextColor={"gray"}
+            onChangeText={(text) => handleChange("fullName", text)}
             style={{
               height: 60,
               borderRadius: 30,
@@ -143,9 +122,11 @@ const RegisterScreen = () => {
             }}
           />
         </View>
+
         <View style={{ width: "100%", marginBottom: 20 }}>
           <TextInput
             placeholder="Email Address *"
+            onChangeText={(text) => handleChange("email", text)}
             placeholderTextColor={"gray"}
             style={{
               height: 60,
@@ -160,22 +141,8 @@ const RegisterScreen = () => {
         <View style={{ width: "100%", marginBottom: 20 }}>
           <TextInput
             placeholder="Mobile Phone *"
-            placeholderTextColor={"gray"}
-            style={{
-              height: 60,
-              borderRadius: 30,
-              padding: 20,
-              width: "100%",
-              backgroundColor: "white",
-              fontSize: 16,
-            }}
-          />
-        </View> */}
-        <View style={{ width: "100%", marginBottom: 20 }}>
-          <TextInput
-            value={formData.username}
-            onChangeText={(text) => handleChange("username", text)}
-            placeholder="User name *"
+            keyboardType="numeric"
+            onChangeText={(text) => handleChange("phoneNumber", text)}
             placeholderTextColor={"gray"}
             style={{
               height: 60,
@@ -189,9 +156,8 @@ const RegisterScreen = () => {
         </View>
         <View style={{ width: "100%", marginBottom: 20 }}>
           <TextInput
-            value={formData.password}
-            onChangeText={(text) => handleChange("password", text)}
-            placeholder="Password *"
+            placeholder="Address*"
+            onChangeText={(text) => handleChange("address", text)}
             placeholderTextColor={"gray"}
             style={{
               height: 60,
@@ -201,12 +167,11 @@ const RegisterScreen = () => {
               backgroundColor: "white",
               fontSize: 16,
             }}
-            secureTextEntry={true}
           />
         </View>
         <View style={{ width: "100%", marginBottom: 20 }}>
           <TouchableOpacity
-            onPress={handleRegister}
+            onPress={handleUpdate}
             style={{
               width: "100%",
               flexDirection: "row",
@@ -225,7 +190,6 @@ const RegisterScreen = () => {
                 alignItems: "center",
               }}
             >
-              <FontAwesome5 name="sign-in-alt" size={24} color="white" />
               <Text
                 style={{
                   fontSize: 20,
@@ -234,70 +198,9 @@ const RegisterScreen = () => {
                   paddingLeft: 10,
                 }}
               >
-                SIGN IN
+                Confirm
               </Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            width: "100%",
-            marginBottom: 20,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 16, color: "gray" }}>
-            Or create account using social media
-          </Text>
-        </View>
-        <View
-          style={{
-            width: "100%",
-            marginBottom: 20,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <FontAwesome5 name="facebook" size={24} color="blue" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: 10,
-            }}
-          >
-            <FontAwesome5 name="google" size={24} color="red" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: 10,
-            }}
-          >
-            <Ionicons name="logo-apple" size={24} color="black" />
           </TouchableOpacity>
         </View>
       </View>
@@ -305,4 +208,4 @@ const RegisterScreen = () => {
   );
 };
 
-export default RegisterScreen;
+export default RegisterInformationScreen;
